@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UsersApp.Model
+namespace UsersApp.DTO
 {
-    public class Person
+    public class PersonDTO
     {
-        public Int64 id { get; set; }
+        public Int64 id { get; }
         public String firstName { get; set; }
         public String lastName { get; set; }
         public String streetName { get; set; }
@@ -18,5 +18,24 @@ namespace UsersApp.Model
         public String town { get; set; }
         public String phoneNumber { get; set; }
         public DateTime birthdate { get; set; }
+        
+        public int age { get { return DateTime.Now.Year - this.birthdate.Year; } } //TODO tymczasowe obliczenia
+        private bool edited;
+
+        public PersonDTO(Int64 id)
+        { 
+            this.id = id;
+            this.edited = false;
+        }
+
+        public bool IsEdited()
+        {
+            return this.edited;
+        }
+
+        public void SetEditedTrue()
+        {
+            this.edited = true;
+        }
     }
 }
