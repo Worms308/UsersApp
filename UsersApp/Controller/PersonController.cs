@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UsersApp.DTO;
 using UsersApp.Model;
 using UsersApp.Repository;
@@ -12,7 +9,7 @@ namespace UsersApp.Controller
 {
     public class PersonController
     {
-        private PersonRepository personRepository = new PersonRepository(); //TODO wstrzykiwanie zaleznosci
+        private readonly PersonRepository personRepository = new PersonRepository(); //TODO wstrzykiwanie zaleznosci
 
         public void Add(PersonDTO dto)
         {
@@ -34,7 +31,15 @@ namespace UsersApp.Controller
 
         public PersonDTO GetPersonById(Int64 id)
         {
-            return null;
+            Person person = personRepository.GetPersonById(id);
+            return PersonTransformer.CreatePersonDTO(person);
         }
+
+        public List<PersonDTO> GetPeople()
+        {
+            List<Person> people = personRepository.GetPeople();
+            return people.ConvertAll(item => PersonTransformer.CreatePersonDTO(item));
+        }
+
     }
 }

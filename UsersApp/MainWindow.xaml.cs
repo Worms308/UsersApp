@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using UsersApp.Controller;
 using UsersApp.DTO;
+using UsersApp.Model.XML;
+using UsersApp.View;
 
 namespace UsersApp
 {
@@ -25,27 +28,49 @@ namespace UsersApp
         public MainWindow()
         {
             InitializeComponent();
+            hasChanges = false;
+            dataGrid.ItemsSource = personView.peopleDTOs;
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private PersonView personView = new PersonView();
+        public bool hasChanges { get; set; }
+
+        private void button_Click(object sender, RoutedEventArgs e) // save button
         {
-            Console.WriteLine("Przycisnięcie przycisku!");
-            PersonDTO newPerson = new PersonDTO(-1);
-            newPerson.firstName = "Jan";
-            newPerson.lastName = "Kowalski";
-            newPerson.streetName = "Wiejska";
-            newPerson.houseNumber = "123a";
-            newPerson.apartmentNumber = "a321";
-            newPerson.postalCode = "01-001";
-            newPerson.town = "Warszawa";
-            newPerson.phoneNumber = "123456789";
-            newPerson.birthdate = new DateTime(1991, 01, 30);
+            personView.SaveChanges();
+            hasChanges = false;
+            changeButtonDisability();
+        }
 
-            PersonController controller = new PersonController();
-            controller.Add(newPerson);
-            Console.WriteLine("Po operacji dodawania");
+        private void dataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
 
-            //PersonDTO fromApp = controller.
+        }
+
+        private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            ((PersonDTO)dataGrid.SelectedItem).SetEditedTrue();
+            hasChanges = true;
+            changeButtonDisability();
+        }
+
+        private void dataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        {
+            hasChanges = true;
+            changeButtonDisability();
+        }
+
+        private void cancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            personView.CancelChanges();
+            hasChanges = false;
+            changeButtonDisability();
+        }
+
+        private void changeButtonDisability()
+        {
+            saveButton.IsEnabled = hasChanges;
+            cancelButton.IsEnabled = hasChanges;
         }
     }
 }

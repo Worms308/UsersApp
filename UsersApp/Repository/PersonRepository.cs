@@ -1,42 +1,116 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UsersApp.Exceptions;
 using UsersApp.Model;
+using UsersApp.Model.XML;
 
 namespace UsersApp.Repository
 {
     class PersonRepository 
     {
-        private LinkedList<Person> people = new LinkedList<Person>();
+        private List<Person> people = new List<Person>();
 
         public void Add(Person person)
         {
-            person.id = people.Count;
-            people.AddLast(person);
+            person.id = this.FindFreeId();
+            people.Add(person);
+        }
+
+        public void AddAll(ICollection<Person> people)
+        {
+            foreach (Person person in people)
+                this.Add(person);
         }
 
         public bool Remove(Person person)
         {
-            return people.Remove(person);
+            try
+            {
+                Person toRemove = this.GetPersonById(person.id);
+                return people.Remove(toRemove);
+            }
+            catch (PersonNotFoundException)
+            {
+                return false;
+            }
         } 
 
-        public void Update(Person person)
+        public bool Update(Person person)
         {
-            Person toRemove = people.First(item => item.id.Equals(person.id));
-            this.Remove(toRemove);
-            this.Add(person); //TODO do poprawy ten element
+            try
+            {
+                Person toEdit = this.GetPersonById(person.id);
+                this.SetFields(toEdit, person);
+                return true;
+            }
+            catch (PersonNotFoundException)
+            {
+                return false;
+            }
         }
 
         public Person GetPersonById(Int64 id)
         {
-            return people.First(item => item.id.Equals(id));
+            try 
+            { 
+                return people.First(item => item.id.Equals(id));
+            } 
+            catch (InvalidOperationException)
+            {
+                throw new PersonNotFoundException();
+            }
         }
 
-        public LinkedList<Person> GetPeople()
+        public List<Person> GetPeople()
         {
-            return new LinkedList<Person>(people);
+            return new List<Person>(people);
+        }
+
+
+        private void SetFields(Person destination, Person source)
+        {
+            destination.firstName = source.firstName;
+            destination.lastName = source.lastName;
+            destination.streetName = source.streetName;
+            destination.houseNumber = source.houseNumber;
+            destination.apartmentNumber = source.apartmentNumber;
+            destination.postalCode = source.postalCode;
+            destination.town = source.town;
+            destination.phoneNumber = source.phoneNumber;
+            destination.birthdate = source.birthdate;
+        }
+
+        private void SaveToFile()
+        {
+            PersonXML.WriteToFile(people, "tmp.xml");
+        }
+
+        private void LoadFromFile()
+        {
+            this.AddAll(PersonXML.ReadFromFile("tmp.xml"));
+        }
+
+        private Int64 FindFreeId()
+        {
+            Int64[] blockedIds = new Int64[people.Count()];
+            for (int i = 0; i < people.Count(); ++i)
+            {
+                blockedIds[i] = people[i].id;
+            }
+
+            Array.Sort(blockedIds);
+            if (blockedIds.Length == 0)
+                return 0;
+            for (int i = 0; i < blockedIds.Length; ++i)
+            {
+                if (i == blockedIds.Length - 1)
+                    return blockedIds[i] + 1;
+                else if (blockedIds[i] + 1 != blockedIds[i+1])
+                    return blockedIds[i] + 1;
+            }
+
+            return 0;
         }
     }
 }
