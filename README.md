@@ -11,3 +11,8 @@ Used technologies:
   
 HINT:
   - To delete row you use "delete" button on your keyboard.
+
+Screens from application:
+
+![alt text](https://images.tinypic.pl/i/01007/j8gcape9hhe4.png)
+![alt text](https://images.tinypic.pl/i/01007/gkrw0tqvzoxj.png)
