@@ -19,56 +19,32 @@ namespace UsersApp.View
         public PersonView()
         {
             peopleDTOs = new ObservableCollection<PersonDTO>();
-
-            //PersonDTO newPerson = new PersonDTO()
-            //{
-            //    firstName = "Mariusz",
-            //    lastName = "Nowak",
-            //    streetName = "Wiejska",
-            //    houseNumber = "123a",
-            //    apartmentNumber = "a321",
-            //    postalCode = "01-001",
-            //    town = "Warszawa",
-            //    phoneNumber = "123456789",
-            //    birthdate = new DateTime(1996, 06, 02)
-            //};
-            //personController.Add(newPerson);
-
-            //PersonDTO newPerson2 = new PersonDTO()
-            //{
-            //    firstName = "Jan",
-            //    lastName = "Kowalski",
-            //    streetName = "Wiejska",
-            //    houseNumber = "123a",
-            //    postalCode = "01-001",
-            //    town = "Warszawa",
-            //    phoneNumber = "123456789",
-            //    birthdate = new DateTime(1996, 06, 02)
-            //};
-            //personController.Add(newPerson2);
             this.LoadFromController();
         }
 
         public void SaveChanges()
         {
+            bool wasSuccesful = true;
             foreach(PersonDTO personDTO in peopleDTOs)
             {
-                ValidationResponse validation = PersonDTOValidator.isValid(personDTO);
-                if (validation.valid)
+                ValidationResponse validation = PersonDTOValidator.IsValid(personDTO);
+                if (personDTO.IsToRemove())
+                    personController.Remove(personDTO);
+                else if (validation.valid)
                 {
                     if (personDTO.id == PersonDTO.NEW_PERSON_ID)
                         personController.Add(personDTO);
-                    else if (personDTO.IsToRemove())
-                        personController.Remove(personDTO);
                     else if (personDTO.IsEdited())
                         personController.Update(personDTO);
                 }
                 else
                 {
+                    wasSuccesful = false;
                     ShowInvalidPerson(personDTO, validation.message);
                 }
             }
-            this.ReloadFromController();
+            if (wasSuccesful)
+                this.ReloadFromController();
         }
 
         public void EditedPerson(int indexInTable)
@@ -103,5 +79,15 @@ namespace UsersApp.View
             this.LoadFromController();
         }
 
+        public void SaveUserData()
+        {
+            personController.SaveUserData();
+        }
+
+        public void ReloadUserData()
+        {
+            personController.ReloadUserData();
+            this.ReloadFromController();
+        }
     }
 }

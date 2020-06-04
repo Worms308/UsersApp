@@ -35,6 +35,7 @@ namespace UsersApp
             hasChanges = false;
             dataGrid.ItemsSource = personView.peopleDTOs;
             SetActualUserTextBlock();
+            personView.ReloadUserData();
         }
 
         public void SetActualUserTextBlock()
@@ -94,9 +95,16 @@ namespace UsersApp
 
         private void accounts_Click(object sender, RoutedEventArgs e)
         {
+            personView.SaveUserData();
             AccountsWindow accountsWindow = new AccountsWindow();
             accountsWindow.SetParent(this);
             accountsWindow.ShowDialog();
+            personView.ReloadUserData();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            personView.SaveUserData();
         }
     }
 }

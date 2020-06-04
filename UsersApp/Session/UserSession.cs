@@ -79,7 +79,7 @@ namespace UsersApp.Session
 
         public void CreateUser(String username)
         {
-            PersonXML.WriteToFile(new List<Person>(), username + ".xml");
+            PersonXML.WriteToFile(new List<Person>(), DIRECTORY + "\\" + username + ".xml");
         }
 
         public void RemoveUser(String username)

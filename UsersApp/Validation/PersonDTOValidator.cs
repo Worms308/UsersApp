@@ -10,7 +10,7 @@ namespace UsersApp.Validation
 {
     class PersonDTOValidator
     {
-        public static ValidationResponse isValid(PersonDTO personDTO)
+        public static ValidationResponse IsValid(PersonDTO personDTO)
         {
             if (String.IsNullOrEmpty(personDTO.firstName))
                 return new ValidationResponse(false, "Missing first name");
@@ -22,28 +22,35 @@ namespace UsersApp.Validation
                 return new ValidationResponse(false, "Missing house number");
             if (String.IsNullOrEmpty(personDTO.postalCode))
                 return new ValidationResponse(false, "Missing postal code");
-            if (!isPostalCodeValid(personDTO.postalCode))
+            if (!IsPostalCodeValid(personDTO.postalCode))
                 return new ValidationResponse(false, "Invalid postal code (should be like xx-xxx)");
             if (String.IsNullOrEmpty(personDTO.town))
                 return new ValidationResponse(false, "Missing town");
             if (String.IsNullOrEmpty(personDTO.phoneNumber))
                 return new ValidationResponse(false, "Missing phone number");
-            if (!isPhoneNumberValid(personDTO.phoneNumber))
+            if (!IsPhoneNumberValid(personDTO.phoneNumber))
                 return new ValidationResponse(false, "Invalid phone number");
             if (personDTO.birthdate == null)
                 return new ValidationResponse(false, "Missing birth date");
+            if (!IsBirthDateValid(personDTO.birthdate))
+                return new ValidationResponse(false, "Birth date cannot be from the future");
 
             return new ValidationResponse(true, "OK");
         }
 
-        private static bool isPhoneNumberValid(String phoneNumber)
+        private static bool IsPhoneNumberValid(String phoneNumber)
         {
             return Regex.IsMatch(phoneNumber, @"(?<!\w)(\(?(\+|00)?48\)?)?[ -]?\d{3}[ -]?\d{3}[ -]?\d{3}(?!\w)");
         }
 
-        private static bool isPostalCodeValid(String postalCode)
+        private static bool IsPostalCodeValid(String postalCode)
         {
             return Regex.IsMatch(postalCode, @"\d{2}-\d{3}$");
+        }
+
+        private static bool IsBirthDateValid(DateTime birthdate)
+        {
+            return birthdate < DateTime.Now;
         }
     }
 }

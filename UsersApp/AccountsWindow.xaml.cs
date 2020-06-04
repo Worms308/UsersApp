@@ -38,6 +38,7 @@ namespace UsersApp
 
         private void RefillUsernames()
         {
+            UserSession.GetInstance().ReloadAvaiableUsers();
             accountsListBox.ItemsSource = UserSession.GetInstance().GetProfiles().ConvertAll(item => item.username);
         }
 
@@ -66,7 +67,7 @@ namespace UsersApp
 
         private bool CanRemoveUser()
         {
-            return accountsListBox.Items.Count > 1;
+            return accountsListBox.Items.Count > 1 && accountsListBox.SelectedItem != null;
         }
 
         private void removeButton_Click(object sender, RoutedEventArgs e)
@@ -99,6 +100,7 @@ namespace UsersApp
         private void selectButton_Click(object sender, RoutedEventArgs e)
         {
             UserSession.GetInstance().SelectUserByName(accountsListBox.SelectedItem.ToString());
+            SetMainWindowCurrentUser();
         }
 
         private void addButton_Click(object sender, RoutedEventArgs e)
@@ -109,12 +111,18 @@ namespace UsersApp
 
         private void Window_Closed(object sender, EventArgs e)
         {
+            SetMainWindowCurrentUser();
+        }
+
+        private void SetMainWindowCurrentUser()
+        {
             ((MainWindow)parentWindow).SetActualUserTextBlock();
         }
 
         private void accountsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SetSelectButtonEnable();
+            SetRemoveButtonEnable();
         }
     }
 }

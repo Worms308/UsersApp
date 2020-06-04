@@ -4,6 +4,7 @@ using System.Linq;
 using UsersApp.Exceptions;
 using UsersApp.Model;
 using UsersApp.Model.XML;
+using UsersApp.Session;
 
 namespace UsersApp.Repository
 {
@@ -81,14 +82,27 @@ namespace UsersApp.Repository
             destination.birthdate = source.birthdate;
         }
 
-        private void SaveToFile()
+        public void ReloadDataOfCurrentUser()
         {
-            PersonXML.WriteToFile(people, "tmp.xml");
+            people.Clear();
+            String filename = UserSession.GetInstance().currentUser.filepath;
+            LoadFromFile(filename);
         }
 
-        private void LoadFromFile()
+        public void SaveDataOfCurrentUser()
         {
-            this.AddAll(PersonXML.ReadFromFile("tmp.xml"));
+            String filename = UserSession.GetInstance().currentUser.filepath;
+            SaveToFile(filename);
+        }
+
+        private void SaveToFile(String filename)
+        {
+            PersonXML.WriteToFile(people, filename);
+        }
+
+        private void LoadFromFile(String filename)
+        {
+            this.AddAll(PersonXML.ReadFromFile(filename));
         }
 
         private Int64 FindFreeId()

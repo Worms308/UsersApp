@@ -9,7 +9,7 @@ namespace UsersApp.Controller
 {
     public class PersonController
     {
-        private readonly PersonRepository personRepository = new PersonRepository(); //TODO wstrzykiwanie zaleznosci
+        private readonly PersonRepository personRepository = new PersonRepository();
 
         public void Add(PersonDTO dto)
         {
@@ -39,6 +39,16 @@ namespace UsersApp.Controller
         {
             List<Person> people = personRepository.GetPeople();
             return people.ConvertAll(item => PersonTransformer.CreatePersonDTO(item));
+        }
+
+        public void SaveUserData()
+        {
+            personRepository.SaveDataOfCurrentUser();
+        }
+
+        public void ReloadUserData()
+        {
+            personRepository.ReloadDataOfCurrentUser();
         }
 
     }
