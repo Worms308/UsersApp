@@ -27,10 +27,14 @@ namespace UsersApp.View
             bool wasSuccesful = true;
             foreach(PersonDTO personDTO in peopleDTOs)
             {
-                ValidationResponse validation = PersonDTOValidator.IsValid(personDTO);
                 if (personDTO.IsToRemove())
+                {
                     personController.Remove(personDTO);
-                else if (validation.valid)
+                    continue;
+                }
+
+                ValidationResponse validation = PersonDTOValidator.IsValid(personDTO);
+                if (validation.valid)
                 {
                     if (personDTO.id == PersonDTO.NEW_PERSON_ID)
                         personController.Add(personDTO);

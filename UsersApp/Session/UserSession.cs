@@ -24,6 +24,10 @@ namespace UsersApp.Session
             this.ReloadAvaiableUsers();
             CreateProfileIfNonExist();
         }
+        public static UserSession GetInstance()
+        {
+            return instance;
+        }
 
         private void CreateProfileIfNonExist()
         {
@@ -45,11 +49,6 @@ namespace UsersApp.Session
             {
                 Directory.CreateDirectory(DIRECTORY);
             }
-        }
-
-        public static UserSession GetInstance()
-        {
-            return instance;
         }
 
         public List<UserProfile> GetProfiles()

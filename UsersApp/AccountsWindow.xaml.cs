@@ -107,6 +107,7 @@ namespace UsersApp
         {
             UserSession.GetInstance().CreateUser(accountNameTextBox.Text);
             RefillUsernames();
+            accountNameTextBox.Text = "";
         }
 
         private void Window_Closed(object sender, EventArgs e)

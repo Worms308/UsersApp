@@ -21,6 +21,7 @@ namespace UsersApp.DTO
         public DateTime birthdate { get; set; }
         
         public int age { get { return (int)((DateTime.Today - birthdate).Days / 365.25); } }
+
         private bool edited = false;
         private bool toRemove = false;
 
