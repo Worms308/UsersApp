@@ -21,18 +21,17 @@ namespace UsersApp.DTO
         public DateTime birthdate { get; set; }
         
         public int age { get { return (int)((DateTime.Today - birthdate).Days / 365.25); } }
-        private bool edited;
+        private bool edited = false;
+        private bool toRemove = false;
 
         public PersonDTO(Int64 id)
         { 
             this.id = id;
-            this.edited = false;
         }
 
         public PersonDTO()
         {
             this.id = NEW_PERSON_ID;
-            this.edited = false;
         }
 
         public bool IsEdited()
@@ -43,6 +42,16 @@ namespace UsersApp.DTO
         public void SetEditedTrue()
         {
             this.edited = true;
+        }
+
+        public bool IsToRemove()
+        {
+            return this.toRemove;
+        }
+
+        public void SetToRemove()
+        {
+            this.toRemove = true;
         }
     }
 }

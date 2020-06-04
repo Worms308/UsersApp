@@ -19,7 +19,7 @@ namespace UsersApp.Model.XML
         public static List<Person> ReadFromFile(String filename)
         {
             List<Person> people = new List<Person>();
-            using (XmlReader reader = XmlReader.Create(filename))
+            using (XmlReader reader = XmlReader.Create("profiles\\" + filename))
             {
                 ReadPeople(people, reader);
             }
@@ -28,7 +28,7 @@ namespace UsersApp.Model.XML
 
         public static void WriteToFile(List<Person> people, String filename)
         {
-            using (XmlWriter writer = XmlWriter.Create(filename, xmlWriterSettings))
+            using (XmlWriter writer = XmlWriter.Create("profiles\\" + filename, xmlWriterSettings))
             {
                 writer.WriteStartDocument();
                 writer.WriteStartElement("People");

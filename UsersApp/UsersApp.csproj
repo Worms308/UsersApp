@@ -55,16 +55,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AccountsWindow.xaml.cs">
+      <DependentUpon>AccountsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controller\PersonController.cs" />
     <Compile Include="DTO\PersonDTO.cs" />
     <Compile Include="Exceptions\PersonNotFoundException.cs" />
     <Compile Include="Model\XML\PersonXML.cs" />
     <Compile Include="Repository\PersonRepository.cs" />
+    <Compile Include="Session\UserProfile.cs" />
     <Compile Include="Session\UserSession.cs" />
     <Compile Include="Transformer\PersonTransformer.cs" />
     <Compile Include="Validation\PersonDTOValidator.cs" />
     <Compile Include="Validation\ValidationResponse.cs" />
     <Compile Include="View\PersonView.cs" />
+    <Page Include="AccountsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

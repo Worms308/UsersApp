@@ -20,32 +20,33 @@ namespace UsersApp.View
         {
             peopleDTOs = new ObservableCollection<PersonDTO>();
 
-            PersonDTO newPerson = new PersonDTO()
-            {
-                firstName = "Mariusz",
-                lastName = "Nowak",
-                streetName = "Wiejska",
-                houseNumber = "123a",
-                apartmentNumber = "a321",
-                postalCode = "01-001",
-                town = "Warszawa",
-                phoneNumber = "123456789",
-                birthdate = new DateTime(1996, 06, 02)
-            };
-            personController.Add(newPerson);
+            //PersonDTO newPerson = new PersonDTO()
+            //{
+            //    firstName = "Mariusz",
+            //    lastName = "Nowak",
+            //    streetName = "Wiejska",
+            //    houseNumber = "123a",
+            //    apartmentNumber = "a321",
+            //    postalCode = "01-001",
+            //    town = "Warszawa",
+            //    phoneNumber = "123456789",
+            //    birthdate = new DateTime(1996, 06, 02)
+            //};
+            //personController.Add(newPerson);
 
-            PersonDTO newPerson2 = new PersonDTO()
-            {
-                firstName = "Jan",
-                lastName = "Kowalski",
-                streetName = "Wiejska",
-                houseNumber = "123a",
-                postalCode = "01-001",
-                town = "Warszawa",
-                phoneNumber = "123456789",
-                birthdate = new DateTime(1996, 06, 02)
-            };
-            personController.Add(newPerson2);
+            //PersonDTO newPerson2 = new PersonDTO()
+            //{
+            //    firstName = "Jan",
+            //    lastName = "Kowalski",
+            //    streetName = "Wiejska",
+            //    houseNumber = "123a",
+            //    postalCode = "01-001",
+            //    town = "Warszawa",
+            //    phoneNumber = "123456789",
+            //    birthdate = new DateTime(1996, 06, 02)
+            //};
+            //personController.Add(newPerson2);
+            this.LoadFromController();
         }
 
         public void SaveChanges()
@@ -55,17 +56,29 @@ namespace UsersApp.View
                 ValidationResponse validation = PersonDTOValidator.isValid(personDTO);
                 if (validation.valid)
                 {
-                    if (personDTO.IsEdited())
-                        personController.Update(personDTO);
                     if (personDTO.id == PersonDTO.NEW_PERSON_ID)
                         personController.Add(personDTO);
+                    else if (personDTO.IsToRemove())
+                        personController.Remove(personDTO);
+                    else if (personDTO.IsEdited())
+                        personController.Update(personDTO);
                 }
                 else
                 {
                     ShowInvalidPerson(personDTO, validation.message);
                 }
-                    
             }
+            this.ReloadFromController();
+        }
+
+        public void EditedPerson(int indexInTable)
+        {
+            peopleDTOs[indexInTable].SetEditedTrue();
+        }
+
+        public void RemovePerson(int indexInTable)
+        {
+            peopleDTOs[indexInTable].SetToRemove();
         }
 
         private void ShowInvalidPerson(PersonDTO personDTO, String errorMessage)
@@ -76,8 +89,18 @@ namespace UsersApp.View
 
         public void CancelChanges()
         {
-            peopleDTOs.Clear();
+            this.ReloadFromController();
+        }
+
+        private void LoadFromController()
+        {
             personController.GetPeople().ForEach(item => peopleDTOs.Add(item));
+        }
+
+        private void ReloadFromController()
+        {
+            peopleDTOs.Clear();
+            this.LoadFromController();
         }
 
     }

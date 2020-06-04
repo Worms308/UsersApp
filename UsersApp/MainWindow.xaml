@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UsersApp"
         mc:Ignorable="d" 
-        Title="UsersApp" Height="500" MinWidth="830" Width="830" FontFamily="Segoe UI">
+        Title="UsersApp" Height="500" MinWidth="850" Width="850" FontFamily="Segoe UI">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -26,7 +26,8 @@
                   FontFamily="Segoe UI Light" AlternatingRowBackground="LightGray"
                   CanUserAddRows="True" BeginningEdit="dataGrid_BeginningEdit" IsReadOnly="False" 
                   CellEditEnding="dataGrid_CellEditEnding" AddingNewItem="dataGrid_AddingNewItem"
-                  AutoGenerateColumns="False" CanUserDeleteRows="True">
+                  AutoGenerateColumns="False" CanUserDeleteRows="False" PreviewKeyDown="dataGrid_PreviewKeyDown"
+                  CanUserReorderColumns="False" RowHeaderWidth="0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding id}" Visibility="Hidden" />
                 <DataGridTextColumn Header="First Name" Binding="{Binding firstName}" Width="*"/>
@@ -37,7 +38,7 @@
                 <DataGridTextColumn Header="Postal Code" Binding="{Binding postalCode}" Width="auto"/>
                 <DataGridTextColumn Header="Town" Binding="{Binding town}" Width="auto"/>
                 <DataGridTextColumn Header="Phone Number" Binding="{Binding phoneNumber}" Width="auto"/>
-                <DataGridTextColumn Header="Birth Date" Binding="{Binding birthdate}" Width="auto"/>
+                <DataGridTextColumn Header="Birth Date" Binding="{Binding birthdate , StringFormat=\{0:dd.MM.yyyy\}}" Width="auto"/>
                 <DataGridTextColumn Header="Age" Binding="{Binding age}" Width="auto" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
@@ -52,7 +53,17 @@
             <Button x:Name="cancelButton" Content="Cancel" Grid.Column="2" Grid.Row="0" Margin="20" Click="cancelButton_Click" IsEnabled="False"/>
 
         </Grid>
-            <!--<Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="381,196,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>-->
-
+        
+        <Grid Grid.ColumnSpan="2" Grid.Column="2" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="accounts" Content="Accounts Manager" Grid.Column="1" Margin="25" Click="accounts_Click"/>
+            <GroupBox Header="Actual User" Margin="10">
+                <TextBlock x:Name="actualUserTextBlock" HorizontalAlignment="Center" FontSize="22" Text="Admin" VerticalAlignment="Center"/>
+            </GroupBox>
+            
+        </Grid>
     </Grid>
 </Window>

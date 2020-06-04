@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using UsersApp.Controller;
 using UsersApp.DTO;
 using UsersApp.Model.XML;
+using UsersApp.Session;
 using UsersApp.View;
 
 namespace UsersApp
@@ -30,6 +31,7 @@ namespace UsersApp
             InitializeComponent();
             hasChanges = false;
             dataGrid.ItemsSource = personView.peopleDTOs;
+            actualUserTextBlock.Text = UserSession.GetInstance().currentUser.username;
         }
 
         private PersonView personView = new PersonView();
@@ -49,7 +51,8 @@ namespace UsersApp
 
         private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            ((PersonDTO)dataGrid.SelectedItem).SetEditedTrue();
+            int indexInTable = dataGrid.SelectedIndex;
+            personView.EditedPerson(indexInTable);
             hasChanges = true;
             changeButtonDisability();
         }
@@ -71,6 +74,23 @@ namespace UsersApp
         {
             saveButton.IsEnabled = hasChanges;
             cancelButton.IsEnabled = hasChanges;
+        }
+
+        private void dataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+                int indexInTable = dataGrid.SelectedIndex;
+                personView.RemovePerson(indexInTable);
+                hasChanges = true;
+                changeButtonDisability();
+            }
+        }
+
+        private void accounts_Click(object sender, RoutedEventArgs e)
+        {
+            AccountsWindow accountsWindow = new AccountsWindow();
+            accountsWindow.ShowDialog();
         }
     }
 }
