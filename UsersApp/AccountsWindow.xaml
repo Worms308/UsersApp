@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UsersApp"
         mc:Ignorable="d"
-        Title="Accounts Manager" Height="450" Width="450" ResizeMode="NoResize">
+        Title="Accounts Manager" Height="450" Width="450" ResizeMode="NoResize" Closed="Window_Closed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="4*"/>
@@ -17,7 +17,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         
-        <ListBox x:Name="accountsListBox" Margin="20" Grid.RowSpan="2"/>
+        <ListBox x:Name="accountsListBox" Margin="20" Grid.RowSpan="2" SelectionChanged="accountsListBox_SelectionChanged"/>
         <Button x:Name="selectButton" Content="Select profile" Grid.Column="1" Grid.Row="0" Width="140" Height="40" Click="selectButton_Click"/>
         <Button x:Name="removeButton" Content="Remove profile" Grid.Column="1" Grid.Row="1" Width="140" Height="40" Click="removeButton_Click"/>
         <Button x:Name="addButton" Content="Add profile" Grid.Column="1" Grid.Row="3" Width="140" Height="40" IsEnabled="False" Click="addButton_Click"/>

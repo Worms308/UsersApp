@@ -84,7 +84,15 @@ namespace UsersApp.Session
 
         public void RemoveUser(String username)
         {
-
+            if (File.Exists(DIRECTORY + "\\" + username + ".xml"))
+            {
+                File.Delete(DIRECTORY + "\\" + username + ".xml");
+                avaiableUsers.Remove(avaiableUsers.Find(user => user.username.Equals(username)));
+                if (currentUser.username.Equals(username))
+                {
+                    currentUser = avaiableUsers.First();
+                }
+            }
         }
     }
 }

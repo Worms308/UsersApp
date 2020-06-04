@@ -26,16 +26,21 @@ namespace UsersApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        private PersonView personView = new PersonView();
+        public bool hasChanges { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
             hasChanges = false;
             dataGrid.ItemsSource = personView.peopleDTOs;
-            actualUserTextBlock.Text = UserSession.GetInstance().currentUser.username;
+            SetActualUserTextBlock();
         }
 
-        private PersonView personView = new PersonView();
-        public bool hasChanges { get; set; }
+        public void SetActualUserTextBlock()
+        {
+            actualUserTextBlock.Text = UserSession.GetInstance().currentUser.username;
+        }
 
         private void button_Click(object sender, RoutedEventArgs e) // save button
         {
@@ -90,6 +95,7 @@ namespace UsersApp
         private void accounts_Click(object sender, RoutedEventArgs e)
         {
             AccountsWindow accountsWindow = new AccountsWindow();
+            accountsWindow.SetParent(this);
             accountsWindow.ShowDialog();
         }
     }
