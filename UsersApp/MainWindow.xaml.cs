@@ -43,7 +43,7 @@ namespace UsersApp
         private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             int indexInTable = dataGrid.SelectedIndex;
-            personView.EditedPerson(indexInTable);
+            personView.SetEditedPersonId(indexInTable);
             hasChanges = true;
             changeButtonDisability();
         }
@@ -72,7 +72,7 @@ namespace UsersApp
             if (e.Key == Key.Delete)
             {
                 int indexInTable = dataGrid.SelectedIndex;
-                personView.RemovePerson(indexInTable);
+                personView.SetRemovePersonId(indexInTable);
                 hasChanges = true;
                 changeButtonDisability();
             }

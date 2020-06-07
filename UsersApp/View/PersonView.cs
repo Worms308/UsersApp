@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using UsersApp.Controller;
 using UsersApp.DTO;
@@ -19,7 +15,7 @@ namespace UsersApp.View
         public PersonView()
         {
             peopleDTOs = new ObservableCollection<PersonDTO>();
-            this.LoadFromController();
+            this.LoadDataFromController();
         }
 
         public void SaveChanges()
@@ -48,39 +44,33 @@ namespace UsersApp.View
                 }
             }
             if (wasSuccesful)
-                this.ReloadFromController();
+                this.ReloadDataFromController();
         }
 
-        public void EditedPerson(int indexInTable)
+        public void SetEditedPersonId(int indexInTable)
         {
             peopleDTOs[indexInTable].SetEditedTrue();
         }
 
-        public void RemovePerson(int indexInTable)
+        public void SetRemovePersonId(int indexInTable)
         {
             peopleDTOs[indexInTable].SetToRemove();
         }
 
-        private void ShowInvalidPerson(PersonDTO personDTO, String errorMessage)
-        {
-            MessageBox.Show("Person \"" + personDTO.firstName + " " + personDTO.lastName + "\" has following error:\n" + errorMessage, "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
         public void CancelChanges()
         {
-            this.ReloadFromController();
+            this.ReloadDataFromController();
         }
 
-        private void LoadFromController()
+        private void LoadDataFromController()
         {
             personController.GetPeople().ForEach(item => peopleDTOs.Add(item));
         }
 
-        private void ReloadFromController()
+        private void ReloadDataFromController()
         {
             peopleDTOs.Clear();
-            this.LoadFromController();
+            this.LoadDataFromController();
         }
 
         public void SaveUserData()
@@ -91,7 +81,13 @@ namespace UsersApp.View
         public void ReloadUserData()
         {
             personController.ReloadUserData();
-            this.ReloadFromController();
+            this.ReloadDataFromController();
+        }
+
+        private void ShowInvalidPerson(PersonDTO personDTO, String errorMessage)
+        {
+            MessageBox.Show("Person \"" + personDTO.firstName + " " + personDTO.lastName + "\" has following error:\n" + errorMessage, "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }
